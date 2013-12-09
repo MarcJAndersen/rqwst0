@@ -1,0 +1,55 @@
+# config-cdisc-ttl-direct.ttl
+
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+[] rdf:type fuseki:Server ;
+   fuseki:services (
+     <#service_cdisc>
+   ) .
+
+# Custom code.
+[] ja:loadClass "com.hp.hpl.jena.tdb.TDB" .
+
+# TDB
+tdb:DatasetTDB  rdfs:subClassOf  ja:RDFDataset .
+tdb:GraphTDB    rdfs:subClassOf  ja:Model .
+
+
+## In-memory, initially empty.
+<#emptyDataset> rdf:type ja:RDFDataset .
+
+## ---------------------------------------------------------------
+## Read-only access to cdisc specifications
+
+<#service_cdisc> rdf:type fuseki:Service ;
+    fuseki:name                     "cdisc" ;    # http://host:port/books
+    fuseki:serviceQuery             "query" ;    # SPARQL query service
+    fuseki:serviceReadGraphStore    "get" ;      # SPARQL Graph store protocol (read only)
+    fuseki:dataset                   <#cdisc> ;
+    # Configuration
+    .
+    
+<#cdisc>    rdf:type ja:RDFDataset ;
+    rdfs:label "CDISC" ;
+    ja:defaultGraph 
+      [ rdfs:label "CDISC RDF PhUse" ;
+        a ja:MemoryModel ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/cdash-1-1.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/sdtm-1-2.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/sdtm-1-3.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/sdtmig-3-1-2.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/sdtmig-3-1-3.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/sendig-3-0.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/adam-2-1.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/std/adamig-1-0.ttl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/schemas/meta-model-schema.owl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/schemas/ct-schema.owl> ] ;
+        ja:content [ja:externalContent <file:rdf.cdisc.org/schemas/cdisc-schema.owl> ] ;
+      ] ;
+    .

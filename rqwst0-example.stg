@@ -1,0 +1,57 @@
+// Sample templates for rqwst0  
+
+/* Show the results from quering SDTM for DM field and AE fiels. 
+   The results comes from two queries and are stored in 
+   respective dm and ae StringTemplate attributes */
+
+showrqs(dm,ae)::= <<
+DM columns:
+===========
+<showcolsDM(dm)>
+===========
+
+AE columns:
+===========
+<showcolsAE(ae)>
+===========
+>>
+
+showcolsDM(dm) ::= <<
+<dm:{v|DM row: <v.varnum>, <v.name>, <v.label>
+}>
+>>
+
+showcolsAE(ae) ::= <<
+<ae:{v|AE row: <v.varnum>, <v.name>, <v.label>
+}>
+>>
+
+
+// Show the codelist 
+showcts(cts)::= <<
+Codelist columns
+===========
+<showcolsCTS(cts)>
+===========
+>>
+
+showcolsCTS(cts) ::= <<
+<cts:{v|Codelist row: <v.nciCode>, <v.cdiscDefinition>, <v.nciPreferredTerm>, <v.cdiscSynonyms>, <v.cdiscSubmissionValue>, <v.codelistName>, <v.isExtensibleCodelist>
+}>
+>>
+
+
+// Create SAS PROC format code for codelist 
+
+formatcts(cts)::= <<
+PROC format;
+value $<first(cts):{v|<v.nciCode>}>X
+<valuestmts(cts)>
+;
+>>
+
+valuestmts(cts) ::= <<
+<cts:{v|"<v.cdiscSubmissionValue>"="<v.nciPreferredTerm>"
+}>
+>>
+

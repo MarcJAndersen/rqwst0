@@ -1,0 +1,34 @@
+# CDISC terminology codelist for lab parameters
+
+prefix cdiscs: <http://rdf.cdisc.org/std/schema#> 
+prefix cts: <http://rdf.cdisc.org/ct/schema#> 
+prefix dc: <http://purl.org/dc/elements/1.1/> 
+prefix mms: <http://rdf.cdisc.org/mms#> 
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix sdtmct: <http://rdf.cdisc.org/sdtm-terminology#> 
+prefix sdtmig-3-1-3: <http://rdf.cdisc.org/std/sdtmig-3-1-3#> 
+prefix sdtms-1-3: <http://rdf.cdisc.org/sdtm-1-3/schema#> 
+prefix skos: <http://www.w3.org/2004/02/skos/core#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+SELECT * WHERE { SERVICE <http://localhost:3030/cdisc/query> { 
+select * where {
+ ?r mms:inValueDomain sdtmct:C65047 .
+ ?r mms:inValueDomain ?inValueDomain .
+ ?r cts:nciCode  ?nciCode .
+ OPTIONAL { ?r cts:cdiscDefinition  ?cdiscDefinition }
+ OPTIONAL { ?r cts:nciPreferredTerm  ?nciPreferredTerm }
+ OPTIONAL { ?r cts:cdiscSynonyms  ?cdiscSynonyms }
+ OPTIONAL { ?r cts:cdiscSubmissionValue ?cdiscSubmissionValue}
+ OPTIONAL { ?r cts:codelistName  ?codelistName }
+ OPTIONAL { ?r cts:isExtensibleCodelist  ?isExtensibleCodelist }
+
+} 
+order by ?nciCode
+}
+}
+
+
+
